@@ -1,0 +1,50 @@
+[
+  {
+    "cod": "",
+    "sigla": "A",
+    "nome": "Afastado",
+    "descricao": ""
+  },
+  {
+    "cod": "",
+    "sigla": "C",
+    "nome": "Convocado",
+    "descricao": ""
+  },
+  {
+    "cod": "",
+    "sigla": "E",
+    "nome": "Exercício",
+    "descricao": ""
+  },
+  {
+    "cod": "",
+    "sigla": "F",
+    "nome": "Fim de Mandato",
+    "descricao": ""
+  },
+  {
+    "cod": "",
+    "sigla": "L",
+    "nome": "Licença",
+    "descricao": ""
+  },
+  {
+    "cod": "",
+    "sigla": "S",
+    "nome": "Suplência",
+    "descricao": ""
+  },
+  {
+    "cod": "",
+    "sigla": "U",
+    "nome": "Suspenso",
+    "descricao": ""
+  },
+  {
+    "cod": "",
+    "sigla": "V",
+    "nome": "Vacância",
+    "descricao": ""
+  }
+]

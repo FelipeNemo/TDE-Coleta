@@ -1,0 +1,10 @@
+# .streamlit/config.toml
+
+[server]
+# Define a porta do servidor, se não quiser usar a 8501
+# port = 8502
+
+[theme]
+# Personaliza o tema do seu aplicativo
+primaryColor="#FF4B4B"
+backgroundColor="#F0F2F6"

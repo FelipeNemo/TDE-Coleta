@@ -1,0 +1,107 @@
+[
+  {
+    "Dataset":"deputados",
+    "Campo":"id",
+    "Tipo de Dado":"int64"
+  },
+  {
+    "Dataset":"deputados",
+    "Campo":"uri",
+    "Tipo de Dado":"object"
+  },
+  {
+    "Dataset":"deputados",
+    "Campo":"nome",
+    "Tipo de Dado":"object"
+  },
+  {
+    "Dataset":"deputados",
+    "Campo":"siglaPartido",
+    "Tipo de Dado":"object"
+  },
+  {
+    "Dataset":"deputados",
+    "Campo":"uriPartido",
+    "Tipo de Dado":"object"
+  },
+  {
+    "Dataset":"deputados",
+    "Campo":"siglaUf",
+    "Tipo de Dado":"object"
+  },
+  {
+    "Dataset":"deputados",
+    "Campo":"idLegislatura",
+    "Tipo de Dado":"int64"
+  },
+  {
+    "Dataset":"deputados",
+    "Campo":"urlFoto",
+    "Tipo de Dado":"object"
+  },
+  {
+    "Dataset":"deputados",
+    "Campo":"email",
+    "Tipo de Dado":"object"
+  },
+  {
+    "Dataset":"eventos",
+    "Campo":"id",
+    "Tipo de Dado":"int64"
+  },
+  {
+    "Dataset":"eventos",
+    "Campo":"uri",
+    "Tipo de Dado":"object"
+  },
+  {
+    "Dataset":"eventos",
+    "Campo":"dataHoraInicio",
+    "Tipo de Dado":"object"
+  },
+  {
+    "Dataset":"eventos",
+    "Campo":"dataHoraFim",
+    "Tipo de Dado":"object"
+  },
+  {
+    "Dataset":"eventos",
+    "Campo":"situacao",
+    "Tipo de Dado":"object"
+  },
+  {
+    "Dataset":"eventos",
+    "Campo":"descricaoTipo",
+    "Tipo de Dado":"object"
+  },
+  {
+    "Dataset":"eventos",
+    "Campo":"descricao",
+    "Tipo de Dado":"object"
+  },
+  {
+    "Dataset":"eventos",
+    "Campo":"localExterno",
+    "Tipo de Dado":"object"
+  },
+  {
+    "Dataset":"eventos",
+    "Campo":"orgaos",
+    "Tipo de Dado":"object"
+  },
+  {
+    "Dataset":"eventos",
+    "Campo":"localCamara",
+    "Tipo de Dado":"object"
+  },
+  {
+    "Dataset":"eventos",
+    "Campo":"urlRegistro",
+    "Tipo de Dado":"object"
+  },
+  {
+    "Dataset":"eventos",
+    "Campo":"id_deputado",
+    "Tipo de Dado":"int64"
+  }
+]

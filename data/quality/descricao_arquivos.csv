@@ -1,0 +1,7 @@
+Arquivo,Nº Linhas,Descrição
+deputados.json,513,Identificação e dados biográficos dos deputados
+freq_eventos.csv,513,Número de eventos associados a cada deputado
+votos_deputados.csv,82709,Votações nominais e participação parlamentar
+ocupacoes.csv,1317,"Cargos, comissões e funções exercidas pelos deputados"
+eventos_sessoes.csv,14319,Sessões deliberativas (dias de trabalho)
+cod_situacao_deputados.json,8,Tabela de referência de situação parlamentar

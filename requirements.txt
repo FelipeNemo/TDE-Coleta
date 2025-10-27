@@ -1,0 +1,11 @@
+streamlit
+pandas
+requests
+matplotlib
+plotly
+numpy
+ipykernel
+jupyterlab
+notebook
+ijson>=3.2.3
+pyarrow>=16.0.0
