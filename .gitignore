@@ -25,3 +25,23 @@
 /.venv/
 **/__pycache__/
 .ipynb_checkpoints/
+
+
+# ========= Dados gerados pesados =========
+/processed/**/*.json
+/processed/**/*.ndjson
+/processed/**/*.csv
+/processed/**/*.parquet
+/processed/**/*.{zip,gz,bz2,xz,zst,feather,arrow,orc,pkl,pickle}
+
+# Mesmas regras para data/processed em qualquer ponto do repo (inclui lab/)
+**/data/processed/**/*.json
+**/data/processed/**/*.ndjson
+**/data/processed/**/*.csv
+**/data/processed/**/*.parquet
+**/data/processed/**/*.{zip,gz,bz2,xz,zst,feather,arrow,orc,pkl,pickle}
+
+# Ambientes e caches
+/.venv/
+**/__pycache__/
+.ipynb_checkpoints/
