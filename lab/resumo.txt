@@ -1,0 +1,187 @@
+Resumo:
+Resultado dos códigos:
+01_coleta_dados.ipynb
+Objetivo
+
+Coletar dados oficiais da API da Câmara dos Deputados (Dados Abertos) para analisar:
+
+Presença dos deputados
+
+Participação em votações
+
+Comparações com regime CLT
+
+Remuneração efetiva (proxy inicial)
+
+Comparações com trabalhadores civis
+
+Fontes e Endpoints Principais
+
+Base: https://dadosabertos.camara.leg.br/api/v2
+
+/deputados (lista de parlamentares, paginação 100 itens)
+
+/eventos (com codTipoEvento=1,2 → sessões deliberativas ordinárias e extraordinárias)
+
+/votacoes (varredura paginada por mês; consolidação em votacoes.csv)
+
+/votacoes/{id}/votos (coleta por votação, resumível por mês)
+
+/referencias/deputados/codSituacao (tabela de referência de situação parlamentar)
+
+/deputados/{id} (metadados e proxy de “situação/remuneração” no momento)
+
+CSV anual público: eventosPresencaDeputados-{ano}.csv (presenças por evento/deputado, anos 2020→hoje)
+
+Janela Temporal e Parâmetros
+
+Período: 2020-01-01 → data de hoje
+
+Ordenação: ordem=ASC + ordenarPor=dataHoraInicio (eventos) / dataHoraRegistro (votações)
+
+Paginação: itens=200 (votações/votos) com retries e sleep curtos para polidez
+
+Fluxo de Coleta (resumo do notebook)
+
+Deputados
+
+Paginação em /deputados; grava ../data/processed/deputados.json.
+
+Sessões (eventos)
+
+/eventos com codTipoEvento=1,2; salva ../data/processed/eventos_sessoes.csv.
+
+Votações
+
+Varredura mensal (2020→hoje) em /votacoes, salvando votacoes_YYYY-MM.csv e consolidando em ../data/processed/votacoes.csv.
+
+Em seguida, coleta de votos por votação (/votacoes/{id}/votos) por mês → votos_YYYY-MM.csv e consolida em ../data/processed/votos_deputados.csv.
+
+Presenças em sessões
+
+Download anual de eventosPresencaDeputados-{ano}.csv; padronização de colunas (id_evento, id_deputado, tipo_presenca, ano_origem);
+
+Salva ../data/processed/presencas.csv (~564.081 linhas no run mostrado).
+
+Situação/Remuneração (proxy)
+
+/deputados/{id} para campos como situacao, condicaoEleitoral, data; grava ../data/processed/remuneracoes.csv.
+
+/referencias/deputados/codSituacao apenas como tabela de apoio.
+
+Datasets criados (no projeto)
+
+../data/processed/deputados.json — id, uri, nome, siglaPartido, uriPartido, siglaUF, idLegislatura, urlFoto, email
+
+../data/processed/eventos_sessoes.csv — id_evento, dataHoraInicio, dataHoraFim
+
+../data/processed/freq_eventos.csv — id_deputado, num_eventos (proxy de presença via contagem de eventos por deputado)
+
+../data/processed/votacoes_YYYY-MM.csv → consolidadas em ../data/processed/votacoes.csv
+
+../data/processed/votos_YYYY-MM.csv → consolidadas em ../data/processed/votos_deputados.csv
+
+../data/processed/presencas.csv — id_evento, id_deputado, tipo_presenca, ano_origem
+
+../data/processed/ocupacoes.csv — id_deputado, titulo, dataInicio, dataFim
+
+../data/processed/remuneracoes.csv — id_deputado, cargo/condicaoEleitoral, situacao, data_inicio
+
+../data/processed/cod_situacao_deputados.json — referência (sigla, nome) para situação parlamentar
+
+Observações de Execução / Logs Relevantes
+
+Progresso de frequência: logs de 25 em 25 deputados até 513/513, totalizando ~464.351 eventos estimados (2020→hoje).
+
+Presenças: “OK — presenças salvas … | linhas: 564081”.
+
+Votações: consolidado mensalmente; houve um EmptyDataError: No columns to parse from file ao concatenar quando algum mês gerou arquivo vazio → mitigado com checagem condicional antes do concat.
+
+02_descricao_dados.ipynb
+
+(Estrutura reservada; preencher com dicionário de dados completo — tipos, chaves, domínio de valores por campo. Pode reutilizar os esquemas detectados durante a coleta.)
+
+03_analise_exploratoria.ipynb
+
+(Estrutura reservada; incluir: distribuições de num_eventos por deputado, evolução mensal de votacoes, mapa de tipo_presenca, top/bottom presenças, correlações simples entre presença declarada x contagem de eventos.)
+
+04_verificacao_qualidade.ipynb
+
+(Estrutura reservada; sugerido validar: unicidade de id em deputados.json; integridade referencial freq_eventos.id_deputado ∈ deputados.id; presencas.id_evento coerente com eventos_sessoes.id_evento; checar arquivos vazios antes de concat; tipos (Int64 para IDs), datas parseáveis, e duplicidades.)
+
+Perguntas para responder:
+Compreensão dos Dados:
+
+Esta seção descreve a compreensão inicial sobre os dados. Desde sua coleta inicial, passando por uma análise exploratória até uma avaliação de sua qualidade.
+
+Resposta:
+Os dados são oficiais da API Dados Abertos da Câmara e cobrem o período de 01/01/2020 até a data de coleta. Nesta fase, a assiduidade é estimada por um proxy de presença: a contagem de participações em sessões deliberativas por deputado (via /eventos e presenças anuais). Mantivemos o processo leve e reprodutível com metadados de deputados e agregados mensais (votações/votos). Checagens básicas de qualidade (unicidade de IDs, integridade de junções, coerência de tipos) foram aplicadas; limitações incluem arquivos mensais potencialmente vazios e a necessidade de cruzar presenças oficiais com participação em votações para maior robustez.
+
+Coleta dos dados:
+
+Descrição de como os dados foram adquiridos. Seu contexto, fontes, métodos de aquisição e problemas encontrados.
+
+Resposta:
+Coleta via HTTP GET com paginação e retries.
+
+/deputados (itens=100) → universo de parlamentares.
+
+/eventos com codTipoEvento=1,2 → sessões deliberativas.
+
+/votacoes mês a mês (2020→hoje), salvando votacoes_YYYY-MM.csv e consolidando em ../data/processed/votacoes.csv.
+
+/votacoes/{id}/votos por mês → votos_YYYY-MM.csv e ../data/processed/votos_deputados.csv.
+
+Presenças: CSVs anuais públicos → ../data/processed/presencas.csv.
+
+Situação/Remuneração (proxy): /deputados/{id} + referência de códigos em /referencias/deputados/codSituacao → ../data/processed/remuneracoes.csv.
+Problema observado: EmptyDataError ao concatenar CSVs quando algum mês não retornou dados; mitigado com checagens condicionais e gravação idempotente por mês.
+
+Descrição dos dados:
+
+Descrição de cada base de dados, incluindo cada campo, tipo de dados, unidade utilizada, códigos etc.
+
+Resposta:
+../data/processed/deputados.json: id (PK, int), nome (str), siglaPartido (str), siglaUF (str), idLegislatura (int), urlFoto (str), email (str), uri/uriPartido (str).
+../data/processed/eventos_sessoes.csv: id_evento (int), dataHoraInicio (datetime str), dataHoraFim (datetime str).
+../data/processed/freq_eventos.csv: id_deputado (FK → deputados.id, int), num_eventos (int).
+../data/processed/votacoes.csv: consolidado de votacoes_YYYY-MM.csv (campos originários da API; id, data, etc.).
+../data/processed/votos_deputados.csv: consolidado de votos_YYYY-MM.csv (campos originários da API; inclui identificação de parlamentar e voto).
+../data/processed/presencas.csv: id_evento (int), id_deputado (int), tipo_presenca (str), ano_origem (int).
+../data/processed/ocupacoes.csv: id_deputado (int), titulo (str), dataInicio/dataFim (str).
+../data/processed/remuneracoes.csv: id_deputado (int), cargo/condicaoEleitoral (str), situacao (str), data_inicio (str).
+../data/processed/cod_situacao_deputados.json: referência (sigla, nome) para interpretação de situação.
+
+Análise exploratória dos dados:
+
+Descrição da exploração inicial dos dados, incluindo objetivos de exploração. Quais operações ou métodos foram realizados, quais padrões nos dados foram encontrados, sejam esperados ou não. Conclusões em relação aos objetivos de mineração e ao que deve ser realizado na etapa de preparação dos dados (limpeza, transformação, pré-processamento).
+
+Resposta:
+Exploração inicial sugerida:
+
+Distribuição de num_eventos por deputado (proxy de presença).
+
+Evolução temporal do número de votações por mês (2020→hoje).
+
+Mapa de tipo_presenca (presente/ausente/justificadas) por ano.
+
+Consistência entre presenças (presencas.csv) e existência do id_evento em eventos_sessoes.csv.
+Preparação recomendada: filtrar/ignorar arquivos vazios antes de concat, padronizar tipos (Int64 para IDs), normalizar datas (ISO), definir chaves de join (ex.: id_deputado, id_evento, id da votação).
+
+Verificação de qualidade dos dados:
+
+Descrição das abordagens e critérios utilizados para avaliar a qualidade dos dados originais e o resultado encontrado com estas avaliações.
+
+Resposta:
+Critérios aplicados/planejados:
+
+Unicidade: deputados.id único; eventos_sessoes.id_evento único.
+
+Integridade referencial: freq_eventos.id_deputado ⊆ deputados.id; presencas.id_evento ⊆ eventos_sessoes.id_evento.
+
+Coerência de tipos: conversão para Int64/string; datas parseáveis.
+
+Arquivos vazios: checagem antes de concat (evitar EmptyDataError).
+
+Duplicatas: remoção em presencas por (id_evento, id_deputado, tipo_presenca).
+Resultados parciais: presenças consolidadas (~564k linhas), coleta mensal funcional de votações/votos com necessidade de guarda-chuva para meses sem dados.
