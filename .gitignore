@@ -23,3 +23,14 @@ data/**/cache/
 !processed/**/sample_*.*
 !processed/**/tiny_*.*
 !processed/**/schema_*.json
+
+/processed/**/*.json
+/processed/**/*.ndjson
+# (opcional) se gerar outros pesados:
+#/processed/**/*.parquet
+#/processed/**/*.csv
+
+# Ambientes e caches
+/.venv/
+**/__pycache__/
+.ipynb_checkpoints/
