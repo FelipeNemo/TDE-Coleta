@@ -1,34 +1,25 @@
 # ========= Artefatos pesados de dados =========
-# JSON/NDJSON enormes
-processed/**/*.json
-processed/**/*.ndjson
-
-# Parquet/CSV e comprimidos
-processed/**/*.parquet
-processed/**/*.csv
-processed/**/*.{zip,gz,bz2,xz,zst}
+/processed/**/*.json
+/processed/**/*.ndjson
+/processed/**/*.parquet
+/processed/**/*.csv
+/processed/**/*.{zip,gz,bz2,xz,zst}
 
 # Diretórios de cache/tmp
-processed/**/tmp/
-processed/**/cache/
-data/**/tmp/
-data/**/cache/
+/processed/**/tmp/
+/processed/**/cache/
+/data/**/tmp/
+/data/**/cache/
 
 # Logs e dumps
 **/*.log
 **/*.tmp
 **/*.dump
 
-# ========= Exceções úteis (permite amostras pequenas) =========
-!processed/**/sample_*.*
-!processed/**/tiny_*.*
-!processed/**/schema_*.json
-
-/processed/**/*.json
-/processed/**/*.ndjson
-# (opcional) se gerar outros pesados:
-#/processed/**/*.parquet
-#/processed/**/*.csv
+# ========= Exceções úteis =========
+!/processed/**/sample_.*
+!/processed/**/tiny_.*
+!/processed/**/schema_.json
 
 # Ambientes e caches
 /.venv/
