@@ -1,7 +1,16 @@
-Arquivo,Nº Linhas,Descrição
-deputados.json,513,Identificação e dados biográficos dos deputados
-freq_eventos.csv,513,Número de eventos associados a cada deputado
-votos_deputados.csv,82709,Votações nominais e participação parlamentar
-ocupacoes.csv,1317,"Cargos, comissões e funções exercidas pelos deputados"
-eventos_sessoes.csv,14319,Sessões deliberativas (dias de trabalho)
-cod_situacao_deputados.json,8,Tabela de referência de situação parlamentar
+ano,arquivo,tamanho_mb
+2020,../data/processed/eventos_parquet/ano=2020/part-00000.parquet,0.219
+2020,../data/processed/eventos_parquet/ano=2020/part-00006.parquet,0.204
+2021,../data/processed/eventos_parquet/ano=2021/part-00001.parquet,5.046
+2021,../data/processed/eventos_parquet/ano=2021/part-00007.parquet,5.616
+2022,../data/processed/eventos_parquet/ano=2022/part-00002.parquet,0.704
+2022,../data/processed/eventos_parquet/ano=2022/part-00008.parquet,0.633
+2023,../data/processed/eventos_parquet/ano=2023/part-00003.parquet,3.31
+2023,../data/processed/eventos_parquet/ano=2023/part-00009.parquet,5.426
+2023,../data/processed/eventos_parquet/ano=2023/part-00012.parquet,1.86
+2024,../data/processed/eventos_parquet/ano=2024/part-00004.parquet,0.99
+2024,../data/processed/eventos_parquet/ano=2024/part-00010.parquet,1.096
+2024,../data/processed/eventos_parquet/ano=2024/part-00013.parquet,0.761
+2025,../data/processed/eventos_parquet/ano=2025/part-00005.parquet,1.527
+2025,../data/processed/eventos_parquet/ano=2025/part-00011.parquet,1.202
+2025,../data/processed/eventos_parquet/ano=2025/part-00014.parquet,0.903
