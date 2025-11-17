@@ -18,6 +18,11 @@ Este trabalho extensionista consiste em realizar os processos de coleta, prepara
 dados sobre gastos e atividade parlamentar dos deputados federais.
 
 ---
+![alt text](image.png)
+![alt text](image-1.png)
+![alt text](image-2.png)
+![alt text](image-3.png)
+---
 
 **Fase 1:**
 
