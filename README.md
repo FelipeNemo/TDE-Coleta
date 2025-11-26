@@ -1,4 +1,4 @@
-# Coleta anpalise e  preparação de dados.
+# Coleta análise e  preparação de dados.
 ### Trabalho extensionista PUCRS/2025-2
 
 **Alunos:**
