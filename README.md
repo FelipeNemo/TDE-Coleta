@@ -1,14 +1,15 @@
-# Trabalho extensionista
+# Coleta anpalise e  preparação de dados.
+### Trabalho extensionista PUCRS/2025-2
 
 **Alunos:**
 
-Felipe Augusto Batista Mendes dos Santos
+* Felipe Augusto Batista Mendes dos Santos
 
-Guilherme Couto de Castro
+* Guilherme Couto de Castro
 
-Gustavo Henrique da Silva
+* Gustavo Henrique da Silva
 
-Thiago Farias dos Santos
+* Thiago Farias dos Santos
 
 ---
 
@@ -18,10 +19,8 @@ Este trabalho extensionista consiste em realizar os processos de coleta, prepara
 dados sobre gastos e atividade parlamentar dos deputados federais.
 
 ---
-![alt text](image.png)
-![alt text](image-1.png)
-![alt text](image-2.png)
-![alt text](image-3.png)
+![alt text](docs/images/image.png)
+![alt text](docs/images/image-1.png)
 ---
 
 **Fase 1:**
@@ -52,38 +51,78 @@ Demonstração gráfica através de Dashboards comparativos, expondo os privilé
 
 ## Execução:
 
-- **Ambiente:**
+- **Estrutura:**
+
+```
+.
+├── app
+│   └── home.py
+├── data
+│   ├── info
+│   │   ├── cod_situacao_deputados.json
+│   │   ├── freq_eventos.csv
+│   │   ├── ocupacoes.csv
+│   │   └── remuneracoes.csv
+│   ├── processed
+│   │   ├── deputados.json
+│   │   ├── eventos.csv
+│   │   ├── presencas.csv
+│   │   ├── votacoes_2020-01.csv
+│   │   ├── votacoes_2020-02_2025-10_todas.csv
+│   │   ├── votacoes_2020-02.csv
+│   │   ├── votacoes_2020-03.csv
+│   │   ├── votacoes_2020-04.csv
+│   │   ├── votacoes_2020-05.csv
+│   │   .
+│   │   .
+|   |   .
+|   |
+│   └── quality
+│       └── descricao_arquivos.csv
+├── docs
+│   ├── images
+│   │   ├── image-1.png
+│   │   └── image.png
+│   ├── relatorios
+│   │   └── Relatório do Projeto Extensionista - Primeira Iteração.pdf
+│   └── sobre
+│       ├── fase1.md
+│       ├── fase2.md
+│       └── fase3.md
+├── lab
+│   ├── 01_coleta_dados.ipynb
+│   ├── 02_descricao_dados.ipynb
+│   ├── 03_analise_exploratoria.ipynb
+│   ├── 04_verificacao_qualidade.ipynb
+│   ├── resumo.txt
+│   └── transform
+│       └── tratamento.ipynb
+├── README.md
+├── requirements.txt
+└── test.py
+```
+
+- **Requirements**
 
 ```python
-
 # Criação do ambiente
-conda create --name tde python=3.10
+conda create --name tde python=3.9
 
 # Ativação de ambiente
 conda activate tde
 
-# instalação de dependências
 pip install -r requirements.txt
+
 ```
 
-- **labs:**
+- **Run:**
 
 ```python
-# Execute
-jupyter lab
+ streamlit app/home.py
 
 ```
 
-- **app:**
+- **Observações:**
 
-```python
-
-```
-
-- **tests:**
-
-```python
-
-```
 
   

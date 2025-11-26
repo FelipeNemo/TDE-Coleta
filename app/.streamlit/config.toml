@@ -5,6 +5,9 @@
 # port = 8502
 
 [theme]
-# Personaliza o tema do seu aplicativo
+# Define o tema base como escuro, o que deixa o fundo preto e 
+# configura automaticamente outras cores para contraste.
+base="dark"
+# Você ainda pode personalizar a cor primária
 primaryColor="#FF4B4B"
-backgroundColor="#F0F2F6"
+# Remova as linhas backgroundColor e textColor, pois base="dark" já as define
