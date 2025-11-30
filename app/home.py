@@ -57,40 +57,13 @@ st.title("LegisCheck")
 st.write("Comparativo de presença, votações, faltas e padrões de jornada dos parlamentares")
 
 # ============================
-# DADOS FICTÍCIOS (MOCADOS)
+# DADOS REAIS:
+df_dep_presenca = pd.read_csv("data/graphs/df_dep_presenca.csv")
+df_dep_votacao = pd.read_csv("data/graphs/df_dep_votacao.csv")
+df_dep_injustificado = pd.read_csv("data/graphs/df_dep_injustificado.csv")
+df_dep = pd.read_csv("data/graphs/df_dep_ganhos.csv")
 # ============================
 
-data_dep = {
-    "deputado": [
-        "Dep_01",
-        "Dep_02",
-        "Dep_03",
-        "Dep_04",
-        "Dep_05",
-        "Dep_06",
-    ],
-    "sessoes_total": [100, 95, 110, 90, 105, 100],
-    "presencas": [92, 80, 100, 70, 85, 60],
-    "votacoes_possiveis": [400, 380, 440, 360, 420, 400],
-    "votacoes_participadas": [380, 300, 410, 260, 350, 200],
-    "salario_bruto": [41000, 42000, 40000, 43000, 44000, 39500],
-    "faltas_injustificadas": [3, 8, 5, 12, 10, 18],
-}
-
-df_dep = pd.DataFrame(data_dep)
-
-df_dep["taxa_presenca"] = df_dep["presencas"] / df_dep["sessoes_total"]
-df_dep["taxa_votacao"] = (
-    df_dep["votacoes_participadas"] / df_dep["votacoes_possiveis"]
-)
-df_dep["ganho_por_dia_trabalhado"] = df_dep["salario_bruto"] / df_dep["presencas"].clip(
-    lower=1
-)
-df_dep["ganho_por_votacao_participada"] = df_dep["salario_bruto"] / df_dep[
-    "votacoes_participadas"
-].clip(lower=1)
-
-limite_faltas_clt = 12
 
 # Trabalhadores CLT (fictícios)
 data_civ = {
@@ -112,47 +85,29 @@ df_dep_gain = pd.DataFrame(
 df_violin = pd.concat([df_dep_gain, df_civ], ignore_index=True)
 
 # ============================
-# SIDEBAR (FILTROS + MINI CHAT)
+# SIDEBAR – APENAS TAXA DE PRESENÇA
 # ============================
-
 with st.sidebar:
-    st.markdown("### 🔎 Filtros (em breve)")
-    st.multiselect(
-        "Deputados",
-        options=sorted(df_dep["deputado"].unique()),
-        help="Selecione um ou mais deputados (sem efeito ainda).",
-    )
+    st.markdown("### Filtro de presença")
 
-    st.slider(
-        "Faixa de presença mínima (%)",
+    faixa_presenca_pct = st.slider(
+        "Faixa de presença (%)",
         min_value=0,
         max_value=100,
         value=(0, 100),
-        help="Filtrará por presença no futuro.",
+        help="Filtra deputados pela taxa de presença em sessões deliberativas.",
     )
 
-    st.slider(
-        "Faixa de taxa de votação (%)",
-        min_value=0,
-        max_value=100,
-        value=(0, 100),
-        help="Filtrará por participação em votações no futuro.",
-    )
+# converter de % para fração 0–1
+min_frac = faixa_presenca_pct[0] / 100
+max_frac = faixa_presenca_pct[1] / 100
 
-    st.checkbox("Apenas quem ultrapassa o limite CLT de faltas", value=False)
+# aplicar filtro
+df_filtrado = df_dep_presenca[
+    (df_dep_presenca["taxa_presenca"] >= min_frac)
+    & (df_dep_presenca["taxa_presenca"] <= max_frac)
+].copy()
 
-    st.markdown("---")
-    st.markdown("### 💬 Assistente jurídico (beta)")
-
-    chat_placeholder = st.empty()
-    user_msg = st.text_input(
-        "Sua pergunta:",
-        placeholder="Ex.: Quais deputados mais se aproximam das regras da CLT?",
-    )
-    if st.button("Enviar", disabled=True):
-        st.info("Integração com GPT em desenvolvimento.")
-
-    st.caption("Em breve: consultas inteligentes aos dados via IA.")
 
 # ============================
 # PALETA DE CORES
@@ -167,10 +122,13 @@ palette_light_orange = "#f2994a"
 # ======================================================================
 # Presença por Deputado
 # ======================================================================
-df_plot1 = df_dep.sort_values("taxa_presenca", ascending=True)
+
+df_plot1 = df_dep_presenca.sort_values("taxa_presenca", ascending=True)
+df_plot1 = df_filtrado.sort_values("taxa_presenca", ascending=True)
+
 fig1 = px.bar(
     df_plot1,
-    x="taxa_presenca",
+    x="taxa_presenca",          # fração 0–1
     y="deputado",
     orientation="h",
     labels={
@@ -180,21 +138,28 @@ fig1 = px.bar(
     title="Presença por Deputado",
     color_discrete_sequence=[palette_main],
 )
-fig1.update_layout(xaxis_tickformat=".0%")
+
+fig1.update_xaxes(
+    range=[0, 1],
+    tick0=0,
+    dtick=0.1,
+    tickformat=".0%",  # 0.85 → 85%
+)
+
 
 # ======================================================================
 # Sessões por Votações Participada
 # ======================================================================
 fig2 = px.scatter(
-    df_dep,
-    x="sessoes_total",
+    df_dep_votacao,
+    x="presencas",
     y="taxa_votacao",
     size="presencas",
     hover_name="deputado",
     color="deputado",
     color_discrete_sequence=[palette_main, palette_light_orange],
     labels={
-        "sessoes_total": "Número de sessões",
+        "presencas": "Número de sessões comparecidas",
         "taxa_votacao": "Taxa de votações participadas",
         "presencas": "Presenças",
         "deputado": "Deputado",
@@ -206,7 +171,10 @@ fig2.update_layout(yaxis_tickformat=".0%")
 # ======================================================================
 # Faltas injustificadas vs limite CLT
 # ======================================================================
-df_plot3 = df_dep.sort_values("faltas_injustificadas", ascending=False)
+limite_faltas_clt = 5  # mantém aqui
+
+df_plot3 = df_dep_injustificado.sort_values("faltas_injustificadas", ascending=False)
+
 fig3 = px.bar(
     df_plot3,
     x="deputado",
@@ -218,6 +186,7 @@ fig3 = px.bar(
     title="Faltas Injustificadas vs Limite CLT",
     color_discrete_sequence=[palette_main],
 )
+
 fig3.add_hline(
     y=limite_faltas_clt,
     line_dash="dash",
@@ -226,6 +195,7 @@ fig3.add_hline(
     annotation_text=f"Limite CLT = {limite_faltas_clt}",
     annotation_position="top right",
 )
+
 
 # ======================================================================
 # Ganho por dia e por votação
@@ -271,6 +241,57 @@ fig5 = px.violin(
     },
     title="Ganho por Dia Trabalhado: Deputados x Trabalhadores CLT",
 )
+
+# ======================================================================
+# Ganho por dia e por votação
+# ======================================================================
+df_long = pd.melt(
+    df_dep,
+    id_vars=["deputado"],
+    value_vars=["ganho_por_dia_trabalhado", "ganho_por_votacao_participada"],
+    var_name="tipo_ganho",
+    value_name="valor",
+)
+df_long["tipo_ganho"] = df_long["tipo_ganho"].map(
+    {
+        "ganho_por_dia_trabalhado": "Ganho por dia trabalhado",
+        "ganho_por_votacao_participada": "Ganho por votação participada",
+    }
+)
+fig4 = px.box(
+    df_long,
+    x="tipo_ganho",
+    y="valor",
+    color="tipo_ganho",
+    color_discrete_sequence=[palette_main, palette_light_orange],
+    points="outliers",
+    labels={"tipo_ganho": "Tipo de ganho", "valor": "R$"},
+    title="Ganho por Dia Trabalhado e por Votação",
+)
+
+# 👉 aqui:
+fig4.update_yaxes(type="log")
+
+# ======================================================================
+# Desigualdade: Deputados x CLT
+# ======================================================================
+fig5 = px.violin(
+    df_violin,
+    x="grupo",
+    y="ganho_por_dia_trabalhado",
+    box=True,
+    points="outliers",
+    color="grupo",
+    color_discrete_sequence=[palette_main, palette_teal],
+    labels={
+        "grupo": "Grupo",
+        "ganho_por_dia_trabalhado": "Ganho por dia trabalhado (R$)",
+    },
+    title="Ganho por Dia Trabalhado: Deputados x Trabalhadores CLT",
+)
+
+# 👉 e aqui também, se quiser:
+fig5.update_yaxes(type="log")
 
 # ======================================================================
 # LAYOUT: 3 GRÁFICOS ACIMA, 2 ABAIXO

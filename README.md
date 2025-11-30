@@ -119,10 +119,10 @@ pip install -r requirements.txt
 
 ```python
  streamlit app/home.py
-
 ```
 
-- **Observações:**
+ - **Observações:**
 
-
-  
+Você pode encontrar os relatórios detalhados de cada fase na pasta docs/relatorios/ e o desenvolvimento técnico nos notebooks da pasta lab/
+ 
+- **Referências:**
