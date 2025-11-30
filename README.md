@@ -21,6 +21,7 @@ dados sobre gastos e atividade parlamentar dos deputados federais.
 ---
 ![alt text](docs/images/image.png)
 ![alt text](docs/images/image-1.png)
+
 ---
 
 **Fase 1:**
@@ -56,8 +57,14 @@ Demonstração gráfica através de Dashboards comparativos, expondo os privilé
 ```
 .
 ├── app
-│   └── home.py
+│   ├── home.py
+│   └── KPIs.md
 ├── data
+│   ├── graphs
+│   │   ├── df_dep_ganhos.csv
+│   │   ├── df_dep_injustificado.csv
+│   │   ├── df_dep_presenca.csv
+│   │   └── df_dep_votacao.csv
 │   ├── info
 │   │   ├── cod_situacao_deputados.json
 │   │   ├── freq_eventos.csv
@@ -71,12 +78,11 @@ Demonstração gráfica através de Dashboards comparativos, expondo os privilé
 │   │   ├── votacoes_2020-02_2025-10_todas.csv
 │   │   ├── votacoes_2020-02.csv
 │   │   ├── votacoes_2020-03.csv
-│   │   ├── votacoes_2020-04.csv
-│   │   ├── votacoes_2020-05.csv
 │   │   .
 │   │   .
-|   |   .
-|   |
+│   │   .
+│   │   └── votacoes_2025-10.csv
+│   │   
 │   └── quality
 │       └── descricao_arquivos.csv
 ├── docs
@@ -94,12 +100,16 @@ Demonstração gráfica através de Dashboards comparativos, expondo os privilé
 │   ├── 02_descricao_dados.ipynb
 │   ├── 03_analise_exploratoria.ipynb
 │   ├── 04_verificacao_qualidade.ipynb
-│   ├── resumo.txt
-│   └── transform
-│       └── tratamento.ipynb
+│   ├── preprocess
+│   │   ├── faltas_injustificadas.ipynb
+│   │   ├── ganhos_deputados.ipynb
+│   │   ├── sessoes_votacao_participada.ipynb
+│   │   ├── tx_presenca_deputado.ipynb
+│   │   ├── Untitled Folder
+│   │   └── visao_geral.ipynb
+│   └── resumo.txt
 ├── README.md
-├── requirements.txt
-└── test.py
+└── requirements.txt
 ```
 
 - **Requirements**

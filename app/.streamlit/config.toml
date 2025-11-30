@@ -1,13 +1,11 @@
 # .streamlit/config.toml
 
 [server]
-# Define a porta do servidor, se não quiser usar a 8501
-# port = 8502
+# port = 8501  # opcional
 
 [theme]
-# Define o tema base como escuro, o que deixa o fundo preto e 
-# configura automaticamente outras cores para contraste.
-base="dark"
-# Você ainda pode personalizar a cor primária
-primaryColor="#FF4B4B"
-# Remova as linhas backgroundColor e textColor, pois base="dark" já as define
+base = "dark"
+primaryColor = "#ff7f0e"          # laranja LegisCheck
+backgroundColor = "#000000"       # fundo geral (padrão do dark)
+secondaryBackgroundColor = "#100F0F" # sidebar / cartões
+textColor = "#FAFAFA"             # texto
