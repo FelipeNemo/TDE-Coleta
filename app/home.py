@@ -78,6 +78,15 @@ with st.sidebar:
         default=None,
         help="Selecione um ou mais deputados para focar a análise.",
     )
+    
+    # --- filtro por id_deputado (opcional) ---
+    opcoes_ids = sorted(df_dep["id_deputado"].dropna().unique().tolist())
+    ids_selecionados = st.multiselect(
+        "Filtrar por id_deputado (opcional)",
+        options=opcoes_ids,
+        default=[],
+        help="Selecione um ou mais ids específicos de deputados, se desejar.",
+    )
 
     # --- filtro por partido ---
     if "siglaPartido" in df_dep_presenca.columns:
@@ -157,7 +166,12 @@ if deps_selecionados:
 if partidos_selecionados:
     mask &= df_dep_base["siglaPartido"].isin(partidos_selecionados)
 
-# 5) ids finais
+
+# 5) filtro por id_deputado (se houver seleção)
+if ids_selecionados:
+    mask &= df_dep_base["id_deputado"].isin(ids_selecionados)
+
+# ids finais
 ids_filtrados = df_dep_base.loc[mask, "id_deputado"].unique()
 
 # 6) aplica aos demais dataframes

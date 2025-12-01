@@ -128,7 +128,7 @@ pip install -r requirements.txt
 - **Run:**
 
 ```python
- streamlit app/home.py
+ streamlit run app/home.py
 ```
 
  - **Observações:**
