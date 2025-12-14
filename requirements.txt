@@ -1,9 +1,7 @@
-# ANÁLISE E MANIPULAÇÃO:
 numpy==2.0.2
 pandas==2.3.3
 pyarrow==21.0.0
 
-# VISUALIZAÇÃO E DASHBOARD:
 streamlit==1.50.0
 plotly==6.5.0
 altair==5.5.0
@@ -11,14 +9,5 @@ matplotlib==3.9.4
 seaborn==0.13.2
 pydeck==0.9.1
 
-# FERRAMENTAS PRINCIPAIS:
-jupyterlab==4.5.0  # Se você usa o Jupyter como ambiente de desenvolvimento
-notebook==7.5.0    # Para notebooks tradicionais
-ipykernel==6.31.0  # O kernel que executa o código
-GitPython==3.1.45  # Se você interage com Git no código
-requests==2.32.5   # Para a coleta da API (dadosabertos.camara.leg.br)
-
-# DEPENDÊNCIAS CRÍTICAS:
-blinker==1.9.0     # Usado internamente pelo Streamlit
-packaging==25.0    # Fundamental para gestão de pacotes
-PyYAML==6.0.3      # Útil para carregar configurações
+requests==2.32.5
+PyYAML==6.0.3
