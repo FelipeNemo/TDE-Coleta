@@ -47,6 +47,37 @@ import pandas as pd
 import streamlit as st
 import plotly.express as px
 
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent  # pasta do home.py
+ROOT_DIR = BASE_DIR.parent                  # volta pra /app (seu projeto usa app/home.py)
+DATA_DIR = ROOT_DIR / "data" / "graphs"
+
+@st.cache_data(show_spinner=False)
+def load_csvs():
+    paths = {
+        "df_dep_presenca": DATA_DIR / "df_dep_presenca.csv",
+        "df_dep_votacao": DATA_DIR / "df_dep_votacao.csv",
+        "df_dep_injustificado": DATA_DIR / "df_dep_injustificado.csv",
+        "df_dep": DATA_DIR / "df_dep_ganhos.csv",
+    }
+
+    missing = [name for name, p in paths.items() if not p.exists()]
+    if missing:
+        # mostra exatamente o que faltou no deploy
+        raise FileNotFoundError(
+            "Arquivos CSV não encontrados no deploy:\n"
+            + "\n".join([f"- {k}: {paths[k]}" for k in missing])
+        )
+
+    return (
+        pd.read_csv(paths["df_dep_presenca"]),
+        pd.read_csv(paths["df_dep_votacao"]),
+        pd.read_csv(paths["df_dep_injustificado"]),
+        pd.read_csv(paths["df_dep"]),
+    )
+
+
 st.set_page_config(
     page_title="LegisCheck",
     layout="wide",
@@ -58,10 +89,13 @@ st.write("Comparativo de presença, votações, faltas e padrões de jornada dos
 
 # ============================
 # DADOS REAIS:
-df_dep_presenca = pd.read_csv("data/graphs/df_dep_presenca.csv")
-df_dep_votacao = pd.read_csv("data/graphs/df_dep_votacao.csv")
-df_dep_injustificado = pd.read_csv("data/graphs/df_dep_injustificado.csv")
-df_dep = pd.read_csv("data/graphs/df_dep_ganhos.csv")
+with st.spinner("Carregando dados..."):
+    try:
+        df_dep_presenca, df_dep_votacao, df_dep_injustificado, df_dep = load_csvs()
+    except Exception as e:
+        st.error("Falha ao carregar os dados do app.")
+        st.exception(e)
+        st.stop()
 
 
 # ============================
